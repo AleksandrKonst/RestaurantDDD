@@ -41,7 +41,7 @@ namespace RestaurantDDD
                 StatusOfOrderId = 1,
                 AddressId = 1
             };
-            var newOrder = orderService.CreateOrder(order, new List<Product>() { product }, client, 1);
+            var newOrder = orderService.CreateOrder(order, new List<Product>() { product }, client);
 
             var clientService = new ClientService();
             

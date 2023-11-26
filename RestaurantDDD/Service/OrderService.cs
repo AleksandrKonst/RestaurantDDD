@@ -17,7 +17,7 @@ public class OrderService
         _orderProductFactory = new OrderProductFactory();
     }
 
-    public Order CreateOrder(Order order, List<Product> products, Client client, int quantity)
+    public Order CreateOrder(Order order, List<Product> products, Client client)
     {
         foreach (var prod in products)
         {
@@ -25,11 +25,21 @@ public class OrderService
             {
                 ProductId = prod.Id,
                 OrderId = order.Id,
-                Quantity = quantity
+                Quantity = 1
             });
         }
         order.ClientId = client.Id;
         var newOrder = _context.Orders.Add(order).Entity;
+        _context.SaveChanges();
+        
+        return newOrder;
+    }
+    
+    public Order PlaceOrderCommand(int clientId, TypeOfPay typeOfPay, List<OrderProduct> products, string city,  string street)
+    {
+        var newOrder = _context.Orders.Add(new Order()).Entity;
+        var newClient = _context.Clients.Add(new Client()).Entity;
+        
         _context.SaveChanges();
         
         return newOrder;
