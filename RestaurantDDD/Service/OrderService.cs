@@ -35,13 +35,26 @@ public class OrderService
         return newOrder;
     }
     
-    public Order PlaceOrderCommand(int clientId, TypeOfPay typeOfPay, List<OrderProduct> products, string city,  string street)
+    public Order PlaceOrderCommand(int clientId, TypeOfPay typeOfPay, List<OrderProduct> products, string city,  string street, string postalCode)
     {
-        var newOrder = _context.Orders.Add(new Order()).Entity;
-        var newClient = _context.Clients.Add(new Client()).Entity;
+        var client = _context.Clients.FirstOrDefault(c => c.Id == clientId);
+        var newOrder = new Order
+        {
+            Client = client,
+            Address = new Address()
+            {
+                City = city,
+                Street = street,
+                PostalCode = postalCode
+            },
+            StatusOfOrderId = 1
+        };
         
+        newOrder.OrderProducts = products;
+        
+        var order = _context.Orders.Add(newOrder);
         _context.SaveChanges();
         
-        return newOrder;
+        return order.Entity;
     }
 }
