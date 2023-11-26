@@ -1,8 +1,8 @@
-﻿using RestaurantConsole.Aggregate;
-using RestaurantConsole.Data;
-using RestaurantConsole.Factory;
+﻿using RestaurantDDD.Aggregate;
+using RestaurantDDD.Data;
+using RestaurantDDD.Factory;
 
-namespace RestaurantConsole.Service;
+namespace RestaurantDDD.Service;
 
 public class OrderService
 {
@@ -17,7 +17,7 @@ public class OrderService
         _orderProductFactory = new OrderProductFactory();
     }
 
-    public Order CreateOrder(Order order, List<Product> products, Client client)
+    public Order CreateOrder(Order order, List<Product> products, Client client, int quantity)
     {
         foreach (var prod in products)
         {
@@ -25,7 +25,7 @@ public class OrderService
             {
                 ProductId = prod.Id,
                 OrderId = order.Id,
-                Quantity = 1
+                Quantity = quantity
             });
         }
         order.ClientId = client.Id;

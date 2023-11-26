@@ -1,7 +1,7 @@
-﻿using RestaurantConsole.Aggregate;
-using RestaurantConsole.Data;
+﻿using RestaurantDDD.Aggregate;
+using RestaurantDDD.Data;
 
-namespace RestaurantConsole.Factory;
+namespace RestaurantDDD.Factory;
 
 public class OrderProductFactory
 {

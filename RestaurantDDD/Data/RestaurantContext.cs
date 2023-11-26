@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RestaurantConsole.Aggregate;
+using RestaurantDDD.Aggregate;
 
-namespace RestaurantConsole.Data;
+namespace RestaurantDDD.Data;
 
 public class RestaurantContext : DbContext
 {

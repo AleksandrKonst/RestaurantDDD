@@ -1,9 +1,9 @@
-﻿using RestaurantConsole.Aggregate;
-using RestaurantConsole.Factory;
-using RestaurantConsole.Repository;
-using RestaurantConsole.Service;
+﻿using RestaurantDDD.Aggregate;
+using RestaurantDDD.Factory;
+using RestaurantDDD.Repository;
+using RestaurantDDD.Service;
 
-namespace RestaurantConsole 
+namespace RestaurantDDD 
 {
     internal class Program
     {
@@ -41,7 +41,7 @@ namespace RestaurantConsole
                 StatusOfOrderId = 1,
                 AddressId = 1
             };
-            var newOrder = orderService.CreateOrder(order, new List<Product>() { product }, client);
+            var newOrder = orderService.CreateOrder(order, new List<Product>() { product }, client, 1);
 
             var clientService = new ClientService();
             

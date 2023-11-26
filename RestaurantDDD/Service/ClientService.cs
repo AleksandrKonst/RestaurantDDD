@@ -1,6 +1,6 @@
-﻿using RestaurantConsole.Data;
+﻿using RestaurantDDD.Data;
 
-namespace RestaurantConsole.Service;
+namespace RestaurantDDD.Service;
 
 public class ClientService
 {

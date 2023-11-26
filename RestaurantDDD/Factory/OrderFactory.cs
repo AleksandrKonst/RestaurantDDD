@@ -1,7 +1,7 @@
-using RestaurantConsole.Aggregate;
-using RestaurantConsole.Data;
+using RestaurantDDD.Aggregate;
+using RestaurantDDD.Data;
 
-namespace RestaurantConsole.Factory;
+namespace RestaurantDDD.Factory;
 
 public class OrderFactory
 {
@@ -14,13 +14,10 @@ public class OrderFactory
 
     public Order CreateOrder(Order order)
     {
-        if (order.OrderProducts.Count > 0)
-        {
-            var newOrder = _context.Orders.Add(order).Entity;
-            _context.SaveChanges();
-            return newOrder;
-        }
+        if (order.OrderProducts.Count <= 0) return order;
+        var newOrder = _context.Orders.Add(order).Entity;
+        _context.SaveChanges();
+        return newOrder;
 
-        return order;
     }
 }

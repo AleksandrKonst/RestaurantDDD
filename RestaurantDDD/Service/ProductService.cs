@@ -1,4 +1,4 @@
-﻿namespace RestaurantConsole.Service;
+﻿namespace RestaurantDDD.Service;
 
 public class ProductService
 {
