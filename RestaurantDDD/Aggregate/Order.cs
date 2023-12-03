@@ -31,6 +31,7 @@ public class StatusOfOrder
     public int Id { get; set; }
     [Required]
     public string Name { get; set; }
+    public string? Details { get; set; }
     
     public ICollection<Order> Orders { get; set; }
 }

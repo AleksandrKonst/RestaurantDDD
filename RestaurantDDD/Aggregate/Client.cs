@@ -22,6 +22,8 @@ public class Client
     public TypeOfPay TypeOfPay { get; set; }
     
     public ICollection<Order> Orders { get; set; }
+    
+    public ICollection<ClientReview> ClientReviews { get; set; }
 }
 
 public class TypeOfPay

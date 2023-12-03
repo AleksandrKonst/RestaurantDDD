@@ -18,6 +18,8 @@ public class RestaurantContext : DbContext
         public virtual DbSet<OrderProduct> OrderProducts { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Address> Addresses { get; set; }
+        public virtual DbSet<Promotion> Promotions { get; set; }
+        public virtual DbSet<ClientReview> ClientReviews { get; set; }
         public virtual DbSet<StatusOfOrder> StatusOfOrders { get; set; }
 
 
@@ -36,6 +38,10 @@ public class RestaurantContext : DbContext
             modelBuilder.Entity<OrderProduct>(entity =>
             {
                 entity.HasKey(op => new { op.OrderId, op.ProductId });
+            });
+            modelBuilder.Entity<ClientReview>(entity =>
+            {
+                entity.HasKey(op => new { op.ClientId, op.ProductId });
             });
         }
 }

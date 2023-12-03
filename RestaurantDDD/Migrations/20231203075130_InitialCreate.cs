@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace RestaurantConsole.Migrations
+namespace RestaurantDDD.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -33,7 +34,9 @@ namespace RestaurantConsole.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Detaills = table.Column<string>(type: "text", nullable: false)
+                    Detaills = table.Column<string>(type: "text", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,7 +49,8 @@ namespace RestaurantConsole.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Details = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -80,6 +84,28 @@ namespace RestaurantConsole.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Promotions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    DataStart = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DataEnd = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ProductId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Promotions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Promotions_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Clients",
                 columns: table => new
                 {
@@ -108,6 +134,31 @@ namespace RestaurantConsole.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ClientReviews",
+                columns: table => new
+                {
+                    ProductId = table.Column<int>(type: "integer", nullable: false),
+                    ClientId = table.Column<int>(type: "integer", nullable: false),
+                    Review = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClientReviews", x => new { x.ClientId, x.ProductId });
+                    table.ForeignKey(
+                        name: "FK_ClientReviews_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClientReviews_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -115,6 +166,8 @@ namespace RestaurantConsole.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     AddressId = table.Column<int>(type: "integer", nullable: false),
                     StatusOfOrderId = table.Column<int>(type: "integer", nullable: false),
+                    TypOfPayId = table.Column<int>(type: "integer", nullable: false),
+                    TypeOfPayId = table.Column<int>(type: "integer", nullable: false),
                     ClientId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -136,6 +189,12 @@ namespace RestaurantConsole.Migrations
                         name: "FK_Orders_StatusOfOrders_StatusOfOrderId",
                         column: x => x.StatusOfOrderId,
                         principalTable: "StatusOfOrders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_TypeOfPay_TypeOfPayId",
+                        column: x => x.TypeOfPayId,
+                        principalTable: "TypeOfPay",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -166,6 +225,11 @@ namespace RestaurantConsole.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_ClientReviews_ProductId",
+                table: "ClientReviews",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Clients_TypeOfCardId",
                 table: "Clients",
                 column: "TypeOfCardId");
@@ -194,13 +258,29 @@ namespace RestaurantConsole.Migrations
                 name: "IX_Orders_StatusOfOrderId",
                 table: "Orders",
                 column: "StatusOfOrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_TypeOfPayId",
+                table: "Orders",
+                column: "TypeOfPayId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Promotions_ProductId",
+                table: "Promotions",
+                column: "ProductId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ClientReviews");
+
+            migrationBuilder.DropTable(
                 name: "OrderProducts");
+
+            migrationBuilder.DropTable(
+                name: "Promotions");
 
             migrationBuilder.DropTable(
                 name: "Orders");
